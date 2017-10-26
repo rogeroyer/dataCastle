@@ -389,7 +389,7 @@ print label_data
 ###############################################################
 test_dataset = pd.read_csv(r'D:\aliyun\ccf_offline_stage1_test_revised.csv', header=None)
 test_dataset.columns = ['user_id', 'merchant_id', 'coupon_id', 'discount_rate', 'distance', 'date_received']
-# test_dataset_two = test_dataset.copy()
+test_dataset_two = test_dataset.copy()
 #
 # 每个商户发的优惠券被多少个不同用户领取并归一化 #
 feature22 = pd.pivot_table(test_dataset, index='merchant_id', values='user_id', aggfunc=call_set)
@@ -688,7 +688,7 @@ test_pre = mode.predict_proba(test_data)[:, 1]
 test_pre = pd.DataFrame(test_pre)
 test_pre.columns = ['probability']
 
-test_dataset = test_dataset.iloc[:, [0, 2, 5]]
+test_dataset = test_dataset_two.iloc[:, [0, 2, 5]]
 test_dataset['probability'] = test_pre['probability']
 test_dataset.to_csv('sample_submission.csv', index=None, header=None)
 print test_dataset
