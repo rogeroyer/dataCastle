@@ -674,3 +674,4 @@ test_dataset['probability'] = test_pre['probability']
 # test_dataset.to_csv('sample_submission.csv', index=None, header=None)
 print test_dataset
 
+auc=0.715
