@@ -688,7 +688,7 @@ test_pre = mode.predict_proba(test_data)[:, 1]
 test_pre = pd.DataFrame(test_pre)
 test_pre.columns = ['probability']
 
-test_dataset = test_dataset_two.iloc[:, [0, 2, 5]]
+test_dataset = test_dataset.iloc[:, [0, 2, 5]]
 test_dataset['probability'] = test_pre['probability']
 test_dataset.to_csv('sample_submission.csv', index=None, header=None)
 print test_dataset
