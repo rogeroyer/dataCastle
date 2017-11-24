@@ -225,6 +225,11 @@ print('Finished!')
 # two   month: 0.467429753694 #
 
 '''three dataSet'''
+# GradientBoostingRegressor #
 # two   month:0.486801016898 #
 # online grade:0.480376 #
+
+# XGBRegressor #
+# two   month:0.488634828648 #
+# online grade:0.471549 #
 
