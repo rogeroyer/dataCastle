@@ -1,4 +1,4 @@
-### 基于jieba分词的Textrank和IT-IDF
+## 基于jieba分词的Textrank和IT-IDF
 
 - 参考资料
   - [python结巴分词、jieba加载停用词表](http://blog.csdn.net/u012052268/article/details/77825981)
@@ -70,3 +70,10 @@ for tk in result:
 ```
 ### 鸣谢
 > 來源：简书  链接：http://www.jianshu.com/p/e3308090a8e0
+
+## 关键词提取-bosonnlp
+- 参考文献
+
+  - [关键词提取](http://docs.bosonnlp.com/keywords.html)
+  
+  - [bosonnlp.py](http://bosonnlp-py.readthedocs.io/#bosonnlp.BosonNLP.extract_keywords)
