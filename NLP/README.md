@@ -2,6 +2,7 @@
 
 - 参考资料
   - [python结巴分词、jieba加载停用词表](http://blog.csdn.net/u012052268/article/details/77825981)
+  - [利用jieba分词,构建词云图](http://www.jianshu.com/p/e3308090a8e0)
 
 ### 标注词性
 ```python
