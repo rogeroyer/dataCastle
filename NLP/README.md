@@ -13,3 +13,45 @@ for word, flag in words:
     # 格式化模版并传入参数
     print('%s, %s' % (word, flag))
 ```
+
+### 手动添加和删除新词
+```python
+import jieba
+jieba.add_word('蓝瘦')
+jieba.add_word('香菇')
+jieba.add_word('我的小伙伴们')
+jieba.add_word('我好方')
+jieba.add_word('倒数第一')
+jieba.del_word('累觉不爱')
+jieba.del_word('很傻很天真')
+jieba.del_word('何弃疗')
+jieba.del_word('友谊的小船')
+jieba.del_word('说翻就翻')
+jieba.del_word('今天')
+
+test_sent = (
+"今天去食堂吃饭没有肉了，蓝瘦香菇\n"
+"前天去爬山的时候脚崴了，结果还得继续出去工作，累觉不爱\n"
+"你不是真的关心我，咱们俩友谊的小船说翻就翻\n"
+"你真的是很傻很天真，我的小伙伴们都觉得你好傻\n"
+"一不小心得了个全班倒数第一，我好方"
+)
+words = jieba.cut(test_sent)
+print('/'.join(words))
+
+result:
+今/天/去/食堂/吃饭/没有/肉/了/，/蓝瘦/香菇/
+Prefix dict has been built succesfully.
+/前天/去/爬山/的/时候/脚崴/了/，/结果/还/得/继续/出去/工作/，/累觉/不爱/
+/你/不是/真的/关心/我/，/咱们/俩/友谊/的/小船/说/翻/就/翻/
+/你/真的/是/很傻/很/天真/，/我的小伙伴们/都/觉得/你好/傻/
+/一不小心/得/了/个/全班/倒数第一/，/我好方
+```
+
+### 添加自定义词典和停用词
+```python
+'''添加自定义字典'''
+jieba.load_userdict(r'PATH\userdict.txt')
+'''添加停用词'''
+jieba.analyse.set_stop_words(r'PATH\stopped_words_two.txt')
+```
