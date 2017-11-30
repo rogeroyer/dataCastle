@@ -55,3 +55,18 @@ jieba.load_userdict(r'PATH\userdict.txt')
 '''添加停用词'''
 jieba.analyse.set_stop_words(r'PATH\stopped_words_two.txt')
 ```
+
+### Tokenize：返回词语在原文的起止位置
+```python
+# -*- coding: utf-8 -*-
+import jieba
+jieba.load_userdict("userdict.txt")
+result = jieba.tokenize(u'我爱四川大学中快食堂的饭菜')
+for tk in result:
+  print("word %s\t\t start: %d \t\t end:%d" % (tk[0], tk[1], tk[2]))
+result = jieba.tokenize(u'我爱四川大学中快食堂的饭菜', mode='search')
+for tk in result:
+  print("word %s\t\t start: %d \t\t end:%d" % (tk[0], tk[1], tk[2]))
+```
+### 鸣谢
+> 來源：简书  链接：http://www.jianshu.com/p/e3308090a8e0
