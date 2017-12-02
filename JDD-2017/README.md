@@ -1,10 +1,16 @@
 ## [官方网站](http://jddjr.jd.com/item/2)
 > shop_id: 1-3000
+
 > code:
+
 > print('t_ads\n', t_ads.drop_duplicates(['shop_id']).sort_values(by='shop_id', ascending=False))
+
 > print('t_comment\n', t_comment.drop_duplicates(['shop_id']).sort_values(by='shop_id', ascending=False))
+
 > print('t_order\n', t_order.drop_duplicates(['shop_id']).sort_values(by='shop_id', ascending=False))
+
 > print('t_product\n', t_product.drop_duplicates(['shop_id']).sort_values(by='shop_id', ascending=False))
+
 > print('t_sales_sum\n', t_sales_sum.drop_duplicates(['shop_id']).sort_values(by='shop_id', ascending=False))
 
 ### t_sales_sum
