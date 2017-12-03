@@ -1,4 +1,4 @@
-'''计算F1值'''
+'''计算F1值-宏平均'''
 '''test_data is dataframe'''
 def F_score(test_data):
     test_data.columns = ['0', '1']
