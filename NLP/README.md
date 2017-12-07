@@ -1,11 +1,12 @@
 ## 基于jieba分词的Textrank和IT-IDF
-
+***
 - 参考资料
   - [python结巴分词、jieba加载停用词表](http://blog.csdn.net/u012052268/article/details/77825981)
   
   - [利用jieba分词,构建词云图](http://www.jianshu.com/p/e3308090a8e0)
 
 ### 标注词性
+***
 ```python
 import jieba.posseg as pseg
 words = pseg.cut("你我他爱北京天安门更爱长城")
@@ -15,6 +16,7 @@ for word, flag in words:
 ```
 
 ### 手动添加和删除新词
+***
 ```python
 import jieba
 jieba.add_word('蓝瘦')
@@ -49,6 +51,7 @@ Prefix dict has been built succesfully.
 ```
 
 ### 添加自定义词典和停用词
+***
 ```python
 '''添加自定义字典'''
 jieba.load_userdict(r'PATH\userdict.txt')
@@ -57,6 +60,7 @@ jieba.analyse.set_stop_words(r'PATH\stopped_words_two.txt')
 ```
 
 ### Tokenize：返回词语在原文的起止位置
+***
 ```python
 # -*- coding: utf-8 -*-
 import jieba
@@ -69,9 +73,11 @@ for tk in result:
   print("word %s\t\t start: %d \t\t end:%d" % (tk[0], tk[1], tk[2]))
 ```
 ### 鸣谢
+***
 > 來源：简书  链接：http://www.jianshu.com/p/e3308090a8e0
-
+> [Blog](http://www.cnblogs.com/csj007523/p/7773027.html)
 ## 关键词提取-bosonnlp
+***
 - 参考文献
 
   - [关键词提取](http://docs.bosonnlp.com/keywords.html)
@@ -79,6 +85,7 @@ for tk in result:
   - [bosonnlp.py](http://bosonnlp-py.readthedocs.io/#bosonnlp.BosonNLP.extract_keywords)
 
 ### 词性表
+***
 
 - 名词 (1个一类，7个二类，5个三类)
 ```
