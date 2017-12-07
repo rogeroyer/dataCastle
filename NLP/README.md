@@ -74,9 +74,9 @@ for tk in result:
 ```
 ### 鸣谢
 ***
-> 來源：简书  链接：http://www.jianshu.com/p/e3308090a8e0
+> [简书](http://www.jianshu.com/p/e3308090a8e0)
 > 
-> [Blog](http://www.cnblogs.com/csj007523/p/7773027.html)
+> [博客](http://www.cnblogs.com/csj007523/p/7773027.html)
 ## 关键词提取-bosonnlp
 ***
 - 参考文献
