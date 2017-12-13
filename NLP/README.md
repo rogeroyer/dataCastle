@@ -294,3 +294,4 @@ if __name__ == "__main__":
         for j in range(len(word)):
             print word[j], weight[i][j]
 ```
+- [参考资料](http://www.cnblogs.com/en-heng/p/5848553.html)
