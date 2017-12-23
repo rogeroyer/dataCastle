@@ -12,7 +12,7 @@ print('t_sales_sum\n', t_sales_sum.drop_duplicates(['shop_id']).sort_values(by='
 
 ### t_sales_sum
 
-```python
+```
 t_sales_sum 每个shop_id的起始时间
 共8个月的数据
 2016-06-30
