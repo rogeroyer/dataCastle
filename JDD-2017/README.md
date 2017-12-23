@@ -23,13 +23,13 @@ t_sales_sum 每个shop_id的起始时间
 2016-11-30
 2016-12-31
 2017-01-31
+
+t_sales_sum 不止对应8个月的shop_id
+2129      9
+2205     37
 ```
 
-> t_sales_sum 不止对应8个月的shop_id
-> 2129      9
-> 2205     37
-
-- t_sales_sum删除重复行
+### t_sales_sum删除重复行
 
 ```python
 print(t_sales_sum.drop_duplicates(['shop_id', 'dt']))
@@ -39,7 +39,7 @@ t_sales_sum = t_sales_sum.sort_values(by=['shop_id', 'dt'], ascending=True)
 
 ### t_product
 
-```python
+```
 最近时间：2017-05-01
 最远时间：2011-04-26
 下架商品信息：
@@ -60,7 +60,7 @@ shop_id ; [2886 rows x 6 columns]  即缺失一定的shop_id
 
 ### t_order 
 
-```python
+```
 最近时间: 2017-04-30
 最远时间: 2016-08-03
 shop_id: 3000个
@@ -68,7 +68,7 @@ shop_id: 3000个
 
 ### t_comment 
 
-```python
+```
 最近时间: 2017-04-30
 最远时间: 2016-08-04
 shop_id: 3000个
@@ -76,7 +76,7 @@ shop_id: 3000个
 
 ### t_ads 
 
-```python
+```
 最近时间: 2017-04-30
 最远时间: 2016-08-04
 shop_id:[1951 rows x 4 columns]
