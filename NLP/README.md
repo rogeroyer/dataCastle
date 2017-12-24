@@ -295,3 +295,6 @@ if __name__ == "__main__":
             print word[j], weight[i][j]
 ```
 - [参考资料](http://www.cnblogs.com/en-heng/p/5848553.html)
+
+### Bag of words
+- [English website](https://pythonprogramminglanguage.com/bag-of-words/)
