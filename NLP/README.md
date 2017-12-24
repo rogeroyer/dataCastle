@@ -298,3 +298,5 @@ if __name__ == "__main__":
 
 ### Bag of words
 - [English website](https://pythonprogramminglanguage.com/bag-of-words/)
+- [Chinese website](https://www.python-course.eu/text_classification_python.php)
+- [English website](https://deeplearning4j.org/bagofwords-tf-idf#term-frequency-inverse-document-frequency-tf-idf)
