@@ -6,6 +6,7 @@ import jieba
 import jieba.analyse
 import jieba.posseg as pseg
 from xgboost.sklearn import XGBClassifier
+from lightgbm import LGBMClassifier
 import xgboost as xgb
 from sklearn import cross_validation,metrics
 from sklearn.ensemble import GradientBoostingClassifier
@@ -159,25 +160,57 @@ def train_module(train_sample, test_sample):
     print(train_label)
     print(test_feature)
 
-    # xgboost #
-    module = xgb.XGBClassifier(
-        learning_rate=0.1,
-        n_estimators=300,
-        max_depth=4,
-        gamma=0.1,
-        subsample=0.7,
-        objective='binary:logistic',
-        nthread=5,
-        scale_pos_weight=1,
-        # seed=27
+    # LightGBM model #
+    module = LGBMClassifier(
+        task='train',
+        boosting_type='gbdt',
+        objective='binary',
+        metric={'l2', 'auc'},
+        min_data=1
     )
     module.fit(train_feature.values, train_label.values)
     proba = module.predict(test_feature.values)  # [:, 1] #
 
-    # # GBDT #
+    # 正确预测出的垃圾新闻数: 8616
+    # 算法输出的垃圾新闻数: 9965
+    # 数据集中原本的垃圾新闻数: 9067
+    # P: 0.864626191670848
+    # R: 0.9502591816477335
+    # F1: 0.905422446406053
+
+    # # xgboost model #
+    # module = xgb.XGBClassifier(
+    #     learning_rate=0.1,
+    #     n_estimators=300,
+    #     max_depth=4,
+    #     gamma=0.1,
+    #     subsample=0.7,
+    #     objective='binary:logistic',
+    #     nthread=5,
+    #     scale_pos_weight=1,
+    #     # seed=27
+    # )
+    # module.fit(train_feature.values, train_label.values)
+    # proba = module.predict(test_feature.values)  # [:, 1] #
+
+    # 正确预测出的垃圾新闻数: 8651
+    # 算法输出的垃圾新闻数: 10070
+    # 数据集中原本的垃圾新闻数: 9067
+    # P: 0.8590863952333664
+    # R: 0.9541193338480203
+    # F1: 0.9041124523175
+
+    # # GBDT  model#
     # module = GradientBoostingClassifier(n_estimators=300, learning_rate=0.1, subsample=0.7)
     # module.fit(train_feature, train_label)
     # proba = module.predict(test_feature)
+
+    # 正确预测出的垃圾新闻数: 8702
+    # 算法输出的垃圾新闻数: 10135
+    # 数据集中原本的垃圾新闻数: 9067
+    # P: 0.8586087814504193
+    # R: 0.9597441270541525
+    # F1: 0.9063639204249557
 
     proba = pd.DataFrame(proba)
     proba.columns = ['probability']
