@@ -35,4 +35,4 @@ R: 0.9567662953567884
 F1: 0.9063838679343852
 ```
 
-[XGBoost | GBDT | LightGBM](http://www.cnblogs.com/mata123/p/7440774.html)
+[XGBoost | GBDT | LightGBM 区别与联系](http://www.cnblogs.com/mata123/p/7440774.html)
