@@ -34,3 +34,5 @@ P: 0.8610421836228288
 R: 0.9567662953567884
 F1: 0.9063838679343852
 ```
+
+[XGBoost | GBDT | LightGBM](http://www.cnblogs.com/mata123/p/7440774.html)
