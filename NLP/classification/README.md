@@ -1,6 +1,6 @@
 ### 结果分析
 
-- XGBOOST modle
+- XGBOOST model
   - 
   ```
   module = xgb.XGBClassifier(
@@ -24,7 +24,7 @@ R: 0.9502591816477335
 F1: 0.905422446406053
 ```
 
-- GBDT modle
+- GBDT model
   - `GradientBoostingClassifier(n_estimators=300, learning_rate=0.1, subsample=0.7)`
 ```
 正确预测出的垃圾新闻数: 8675
