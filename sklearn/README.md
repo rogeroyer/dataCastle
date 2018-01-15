@@ -1,4 +1,4 @@
-## sklearn python API
+# sklearn python API
 
 - [LinearRegression](http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html)
 ```python
