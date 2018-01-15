@@ -98,3 +98,5 @@ train_reduced = PCA.fit_transform(train)
 test_reduced = PCA.transform(test)
 ```
 ***
+
+### [References](https://mp.weixin.qq.com/s/vwNaLDkmXiNRmj-D3Ae6eQ)
