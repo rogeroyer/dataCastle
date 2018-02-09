@@ -6,9 +6,9 @@ print(aliyun_yc_dataset[['class_id', 'power', 'engine_torque']])
 # aliyun_yc_dateset => pandas.DataFrame #
 ```
 
-> [applymap](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.applymap.html#pandas.DataFrame.applymap) #
-> [apply](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.apply.html) #
-> [transform](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.transform.html#pandas.DataFrame.transform) #
+ '[applymap]'(https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.applymap.html#pandas.DataFrame.applymap) 
+ '[apply]'(https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.apply.html) 
+ '[transform]'(https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.transform.html#pandas.DataFrame.transform) 
 
 ```python
 print(aliyun_yc_dataset[['class_id', 'power', 'engine_torque']].applymap(lambda x: '%.2f' % x))
