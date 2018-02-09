@@ -19,3 +19,44 @@ Examples
         1  3  4
         2  5  6
         3  7  8
+
+        
+        
+>>> df1
+  letter  number
+0      a       1
+1      b       2
+>>> df2
+  letter  number
+0      c       3
+1      d       4
+>>> pd.concat([df1, df2])
+  letter  number
+0      a       1
+1      b       2
+0      c       3
+1      d       4
+>>> pd.concat([df1, df2], ignore_index=True)
+  letter  number
+0      a       1
+1      b       2
+2      c       3
+3      d       4
+>>> pd.concat([df1, df2], ignore_index=True)
+  letter  number
+0      a       1
+1      b       2
+2      c       3
+3      d       4
+>>> df1.append(df2)
+  letter  number
+0      a       1
+1      b       2
+0      c       3
+1      d       4
+>>> df1.append(df2, ignore_index=True)
+  letter  number
+0      a       1
+1      b       2
+2      c       3
+3      d       4
