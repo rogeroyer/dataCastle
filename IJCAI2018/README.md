@@ -1,4 +1,4 @@
-# [IJCAL-2018 ](https://tianchi.aliyun.com/competition/information.htm?spm=5176.100071.5678.2.f1b27cf0n8lDs8&raceId=231647)
+# <p align="center">[IJCAL-2018 ](https://tianchi.aliyun.com/competition/information.htm?spm=5176.100071.5678.2.f1b27cf0n8lDs8&raceId=231647)</p>
 
 ***
 
