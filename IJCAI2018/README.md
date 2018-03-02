@@ -38,6 +38,7 @@ print(test_original_data)
 
 # train_original_data.to_csv('ijcai_train_data.csv', index=None)
 # test_original_data.to_csv('ijcai_test_data.csv', index=None)
+# 到此数据即可使用 #
 
 
 ##### 处理原数据 将分隔符' ' -> ',' ####
