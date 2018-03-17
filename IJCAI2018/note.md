@@ -44,3 +44,46 @@ result:
 (478138, 27)
 (197694, 1)
 ```
+
+### 正负样本比例
+9021：469117
+
+### 重复行
+ijcai_train_data.shape：478138
+ijcai_train_data.drop_duplicates().shape：478111
+ijcai_train_data.drop_duplicates(['instance_id']).shape：478087
+
+### 时间段数量分析
+```python
+code:
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180918'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180919'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180920'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180921'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180922'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180923'].shape)
+print(ijcai_train_data[ijcai_train_data['context_timestamp'] == '20180924'].shape)
+
+result:
+(78268, 27)
+(70931, 27)
+(68387, 27)
+(71199, 27)
+(68318, 27)
+(63614, 27)
+(57421, 27)
+```
+
+### 噪声值处理
+- 用户信息字段
+```
+user_star_level
+user_occupation_id
+user_age_id
+为-1的元组数据维数
+(964, 27)
+(964, 27)
+(964, 27)
+
+user_gender_id  等于-1的元组数据维数  (12902, 27)
+```
