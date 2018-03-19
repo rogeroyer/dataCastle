@@ -86,4 +86,10 @@ user_age_id
 (964, 27)
 
 user_gender_id  等于-1的元组数据维数  (12902, 27)
+
+item_sales_level  存在值为 -1
+
+context_page_id  广告商品的展示页面编号 4001-4020
+
+shop_star_level  店铺的星级编号  4999-5020
 ```
