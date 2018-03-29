@@ -482,12 +482,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# sample = pd.read_csv('result.csv', low_memory=False)
-# sample['predicted_score'] = [index + 0.2 if index > 0.1 else index for index in sample['predicted_score']]
-# print(sample[sample['predicted_score'] > 0.1])
-# print(sample[sample['predicted_score'] > 0.1].shape)
-
-# train_feature = pd.read_csv('train_feature.csv', low_memory=False)
-# print(train_feature.columns)
-# # print(np.isnan(train_feature).any())
