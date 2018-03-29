@@ -97,7 +97,8 @@ clf.fit(X_train_valid, y_train_valid)
 clf_probs = clf.predict_proba(X_test)
 score = log_loss(y_test, clf_probs)
 ```
-       - log_loss python实现
+
+- log_loss python实现
  ```python
      def logloss(act, pred):
         epsilon = 1e-15
