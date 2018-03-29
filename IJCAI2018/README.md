@@ -97,3 +97,14 @@ clf.fit(X_train_valid, y_train_valid)
 clf_probs = clf.predict_proba(X_test)
 score = log_loss(y_test, clf_probs)
 ```
+       - log_loss python实现
+ ```python
+     def logloss(act, pred):
+        epsilon = 1e-15
+        pred = sp.maximum(epsilon, pred)
+        pred = sp.minimum(1 - epsilon, pred)
+        ll = sum(act * sp.log(pred) + sp.subtract(1, act) * sp.log(sp.subtract(1, pred)))
+        ll = ll * -1.0 / len(act)
+        return ll
+    score = logloss(validate_label.values, validate_label_predict.values)   #   0.0816689217692  #
+ ```
