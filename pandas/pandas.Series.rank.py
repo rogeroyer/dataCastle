@@ -47,7 +47,7 @@ dtype: float64
   
   
   
-
+# 排序特征提取 #
 s = pd.DataFrame([['2012', 'A', 4], ['2012', 'B', 8], ['2011', 'A', 21], ['2011', 'B', 31]], columns=['Year', 'Manager', 'Return'])
 b = pd.DataFrame([['2012', 'A', 3], ['2012', 'B', 7], ['2011', 'A', 20], ['2011', 'B', 30]], columns=['Year', 'Manager', 'Return'])
 s = s.append(b)
