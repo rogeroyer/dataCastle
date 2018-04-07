@@ -3,7 +3,7 @@
 Author:Roger
 date:2018-03-26
 offline:0.0822725453071
-online:max
+online:2
 module:xgboost
 '''
 
