@@ -243,7 +243,7 @@ def drill_module(model = 'lightGBM', is_store=False, store_feature=False):
 
     if model == 'GBDT':
         '''GBDT module'''
-        module = GradientBoostingClassifier(n_estimators=300, learning_rate=0.1, max_depth=2)
+        module = GradientBoostingClassifier(n_estimators=500, learning_rate=0.02, max_depth=4)
 
     elif model == 'xgboost':
         '''xgboost module'''
