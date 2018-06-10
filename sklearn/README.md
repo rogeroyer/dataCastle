@@ -13,7 +13,7 @@ module.predict(test)
 - [LogisticRegression](http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html)
 ```python
 from sklearn.linear_model import LogisticRegression         # 逻辑回归 #
-module = LogisticRegression()
+module = LogisticRegression(penalty='l2', solver='sag', max_iter=500, random_state=42, n_jobs=4)
 module.fit(x, y)
 module.score(x, y)
 module.predict(test)
