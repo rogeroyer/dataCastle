@@ -61,3 +61,34 @@ array([[1, 0, 0],
        [0, 1, 0],
        [0, 0, 1]])
 
+
+
+
+
+
+
+'''pandas'''
+>>> testdata = pd.DataFrame({'pet': ['chinese', 'english', 'english', 'math'],
+...                          'age': [6 , 5, 2, 2],
+...                          'salary':[7, 5, 2, 5]})
+>>> testdata
+   age      pet  salary
+0    6  chinese       7
+1    5  english       5
+2    2  english       2
+3    2     math       5
+>>> a = pd.get_dummies(testdata,columns=['pet'])
+>>> a
+   age  salary  pet_chinese  pet_english  pet_math
+0    6       7            1            0         0
+1    5       5            0            1         0
+2    2       2            0            1         0
+3    2       5            0            0         1
+
+>>> a = pd.get_dummies(testdata,columns=['pet', 'age'])
+>>> a
+   salary  pet_chinese  pet_english  pet_math  age_2  age_5  age_6
+0       7            1            0         0      0      0      1
+1       5            0            1         0      0      1      0
+2       2            0            1         0      1      0      0
+3       5            0            0         1      1      0      0
