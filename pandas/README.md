@@ -4,6 +4,8 @@
 # 输出class_id power engine_torque 三个属性列#
 print(aliyun_yc_dataset[['class_id', 'power', 'engine_torque']])
 # aliyun_yc_dateset => pandas.DataFrame #
+# 判断某个值是否属于np.nan #
+np.isnan(value)
 ```
 
  [pandas.applymap](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.applymap.html#pandas.DataFrame.applymap)
