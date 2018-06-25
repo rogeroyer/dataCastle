@@ -85,7 +85,9 @@ Sum of squared distances of samples to their closest cluster center.
 </tr>
 </table>
 ***
+
 ### **参数详解[中文]**
+
 ```
 sklearn.cluster.KMeans(
     n_clusters=8,
@@ -100,6 +102,7 @@ sklearn.cluster.KMeans(
     n_jobs=1, 
     algorithm='auto'
     )
+    
 n_clusters: 簇的个数，即你想聚成几类
 init: 初始簇中心的获取方法
 n_init: 获取初始簇中心的更迭次数，为了弥补初始质心的影响，算法默认会初始10个质心，实现算法，然后返回最好的结果。
@@ -113,6 +116,7 @@ n_jobs: 并行设置
 algorithm: kmeans的实现算法，有：’auto’, ‘full’, ‘elkan’, 其中 ‘full’表示用EM方式实现
 虽然有很多参数，但是都已经给出了默认值。所以我们一般不需要去传入这些参数,参数的。可以根据实际需要来调用。
 ```
+
 ***
 ### **程序示例**
 
