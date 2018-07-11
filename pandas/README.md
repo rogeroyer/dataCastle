@@ -1,4 +1,4 @@
-### 此目录用于收集python数据处理的一些用法
+### 此目录用于收集python pandas数据处理的一些用法
 
 ```python
 # 输出class_id power engine_torque 三个属性列#
