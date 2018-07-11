@@ -10,4 +10,7 @@
 
 [**NLP自然语言处理项目**](https://github.com/rogeroyer/dataCastle/tree/master/NLP)
 
+[**IJCAI-2018**](https://github.com/rogeroyer/dataCastle/tree/master/IJCAI2018)
+
+[**马上AI全球挑战赛-违约用户风险预测**](https://github.com/rogeroyer/AI-challenger-contest)
 ***
