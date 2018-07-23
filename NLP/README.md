@@ -313,4 +313,4 @@ if __name__ == "__main__":
 ### 协同过滤算法
 - [推荐系统的常用算法原理和实现](https://blog.csdn.net/xsl_bj/article/details/51120643)
 - [推荐系统方法和算法简介](https://www.ibm.com/developerworks/cn/opensource/os-recommender1/index.html)
-
+- [推荐系统入门](https://wizardforcel.gitbooks.io/guide-to-data-mining/content/2.html)
