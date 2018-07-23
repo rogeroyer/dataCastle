@@ -308,3 +308,7 @@ if __name__ == "__main__":
 - [English website](https://pythonprogramminglanguage.com/bag-of-words/)
 - [Chinese website](https://www.python-course.eu/text_classification_python.php)
 - [English website](https://deeplearning4j.org/bagofwords-tf-idf#term-frequency-inverse-document-frequency-tf-idf)
+
+
+### 协同过滤算法
+- [推荐系统的常用算法原理和实现](https://blog.csdn.net/xsl_bj/article/details/51120643)
