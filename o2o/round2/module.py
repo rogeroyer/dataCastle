@@ -16,9 +16,9 @@ def calc_auc_score(data_frame, predict):
     '''
     def return_score(label, predict):
         if len(label) == 1:
-            return 0
+            return 1
         if len(set(label)) == 1:
-            return 0
+            return 1
 
         # if len(set(label)) == 1:
         #     if 0 in set(label):
