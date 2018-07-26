@@ -4,9 +4,10 @@ import gc
 import warnings
 import numpy as np
 import pandas as pd
-warnings.filterwarnings("ignore")
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import OneHotEncoder
+warnings.filterwarnings("ignore")
 
 path = 'dataSet//'
 
@@ -30,38 +31,23 @@ def return_set(group):
     return set(group)
 
 
-def calc_auc_score(data_frame, predict):
-    '''
-    :param data_frame:['Coupon_id', 'label']
-    :param predict: predict = []
-    :return:auc score
-    '''
-    def return_score(label, predict):
-        return roc_auc_score(label, predict)
-
-    data_frame['predict'] = [index for index in predict]
-    data_frame_label = pd.pivot_table(data_frame, index='Coupon_id', values=['label'], aggfunc=return_list).reset_index()
-    data_frame_predict = pd.pivot_table(data_frame, index='Coupon_id', values=['predict'], aggfunc=return_list).reset_index()
-    data_frame_label = data_frame_label.merge(data_frame_predict, on='Coupon_id', how='left')
-    data_frame_label['score'] = data_frame_label.apply(lambda index: return_score(index.label, index.predict),axis=1)
-    # print(data_frame_label)
-    return np.mean(data_frame_label['score'])
+def calc_discount_type(words):
+    if words is np.nan:
+        return 0, np.nan, np.nan, np.nan
+    if words.find('.') >= 0:
+        return 0, -1, -1, float(words)
+    else:
+        up = int(words.split(':')[1])
+        down = int(words.split(':')[0])
+        return 1, down, up, up / down
 
 
 def extract_label_section_features(start_date, end_date, ccf_off_data):
     features = ccf_off_data[(ccf_off_data['Date_received'] >= start_date) & (ccf_off_data['Date_received'] < end_date)]
+    features.index = range(len(features))
     features['distance_inverse'] = 10 - features['Distance']
 
-    def calc_discount_type(words):
-        if words is np.nan:
-            return 0, np.nan, np.nan, np.nan
-        if words.find('.') >= 0:
-            return 0, -1, -1, float(words)
-        else:
-            up = int(words.split(':')[1])
-            down = int(words.split(':')[0])
-            return 1, down, up, up / down
-
+    # 折扣率处理 #
     features['discount_type'] = features['Discount_rate'].map(lambda index: calc_discount_type(index))
     features['discount_type_man'] = features['discount_type'].map(lambda index: index[0])
     features['discount_type_down'] = features['discount_type'].map(lambda index: index[1])
@@ -72,15 +58,35 @@ def extract_label_section_features(start_date, end_date, ccf_off_data):
     # 距离和折扣率的排序特征 #
     features['user_distance_rank'] = features.groupby('User_id')['Distance'].rank(ascending=False, method='dense')
     features['user_distance_rank_reverse'] = features.groupby('User_id')['Distance'].rank(ascending=True, method='dense')
+    features['user_discount_type_down_rank'] = features.groupby('User_id')['discount_type_down'].rank(ascending=True, method='dense')
+    features['user_discount_type_up_rank'] = features.groupby('User_id')['discount_type_up'].rank(ascending=True, method='dense')
+    features['user_date_received_rank'] = features.groupby('User_id')['Date_received'].rank(ascending=True, method='dense')
     features['user_discount_rate_rank'] = features.groupby('User_id')['discount_type_rate'].rank(ascending=False, method='dense')
     features['user_discount_rate_rank_reverse'] = features.groupby('User_id')['discount_type_rate'].rank(ascending=True, method='dense')
+
     features['merchant_distance_rank'] = features.groupby('Merchant_id')['Distance'].rank(ascending=False, method='dense')
     features['merchant_distance_rank_reverse'] = features.groupby('Merchant_id')['Distance'].rank(ascending=True, method='dense')
+    features['merchant_discount_type_down_rank'] = features.groupby('Merchant_id')['discount_type_down'].rank(ascending=True, method='dense')
+    features['merchant_discount_type_up_rank'] = features.groupby('Merchant_id')['discount_type_up'].rank(ascending=True, method='dense')
+    features['merchant_date_received_rank'] = features.groupby('Merchant_id')['Date_received'].rank(ascending=True, method='dense')
     features['merchant_discount_rate_rank'] = features.groupby('Merchant_id')['discount_type_rate'].rank(ascending=False, method='dense')
     features['merchant_discount_rate_rank_reverse'] = features.groupby('Merchant_id')['discount_type_rate'].rank(ascending=True, method='dense')
+
     features['coupon_distance_rank'] = features.groupby('Coupon_id')['Distance'].rank(ascending=False, method='dense')
     features['coupon_distance_rank_reverse'] = features.groupby('Coupon_id')['Distance'].rank(ascending=True, method='dense')
+    features['coupon_date_received_reverse'] = features.groupby('Coupon_id')['Date_received'].rank(ascending=True, method='dense')
+
+    # 距离one-hot编码 #
+    feature_two = features[['Distance']].copy()
+    feature_two['Distance'] = feature_two['Distance'].fillna(11)
+    distance_one_hot = OneHotEncoder(sparse=False).fit_transform(feature_two[['Distance']])
+    distance_one_hot = pd.DataFrame(distance_one_hot, columns=['distance_type' + str(index) for index in range(12)])
+    features = pd.concat([features, distance_one_hot], axis=1)
+    del feature_two, distance_one_hot
+    gc.collect()
     # print(features)
+
+    print(features.shape)
     return features.drop(['Discount_rate', 'Date_received'], axis=1)
 
 
@@ -92,6 +98,9 @@ def extract_label_section_features(start_date, end_date, ccf_off_data):
 
 def extract_feature_section_features(start_date, end_date, ccf_off_data, features):
     ccf_data = ccf_off_data[(ccf_off_data['Date_received'] >= start_date) & (ccf_off_data['Date_received'] < end_date)]
+    ccf_data['discount_type'] = ccf_data['Discount_rate'].map(lambda index: calc_discount_type(index))
+    ccf_data['discount_type_rate'] = ccf_data['discount_type'].map(lambda index: index[3])
+
     coupon_isnull_data = ccf_off_data[ccf_off_data['Date_received'].isnull()]      # 未领券的消费记录 #
     ccf_data_two = coupon_isnull_data[(coupon_isnull_data['Date'] >= start_date) & (coupon_isnull_data['Date'] < end_date)]       # 该区间内未领券但消费了的用户 #
     del coupon_isnull_data
@@ -104,9 +113,9 @@ def extract_feature_section_features(start_date, end_date, ccf_off_data, feature
     user_merchant_set_len = pd.pivot_table(ccf_data, index='User_id', values='Merchant_id', aggfunc=return_set_len).reset_index().rename(columns={'Merchant_id': 'user_merchant_set_len'})
     user_coupon_set_len = pd.pivot_table(ccf_data, index='User_id', values='Coupon_id', aggfunc=return_set_len).reset_index().rename(columns={'Coupon_id': 'user_coupon_set_len'})
     user_discount_rate_set_len = pd.pivot_table(ccf_data, index='User_id', values='Discount_rate', aggfunc=return_set_len).reset_index().rename(columns={'Discount_rate': 'user_discount_rate_set_len'})
-    user_discount_type_rate = pd.pivot_table(features, index='User_id', values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    user_discount_type_rate = pd.pivot_table(ccf_data, index='User_id', values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     user_discount_type_rate.columns = ['User_id', 'discount_type_rate_mean', 'discount_type_rate_max', 'discount_type_rate_min', 'discount_type_rate_median', 'discount_type_rate_var']
-    user_distance = pd.pivot_table(features, index='User_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    user_distance = pd.pivot_table(ccf_data, index='User_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     user_distance.columns = ['User_id', 'user_distance_mean', 'user_distance_max', 'user_distance_min', 'user_distance_median', 'user_distance_var']
     features = features.merge(user_merchant_set_len, on='User_id', how='left')
     features = features.merge(user_coupon_set_len, on='User_id', how='left')
@@ -117,9 +126,9 @@ def extract_feature_section_features(start_date, end_date, ccf_off_data, feature
     # 商铺基础统计特征 #
     merchant_cnt = pd.pivot_table(ccf_data, index='Merchant_id', values='User_id', aggfunc='count').reset_index().rename(columns={'User_id': 'merchant_cnt'})
     features = features.merge(merchant_cnt, on='Merchant_id', how='left')
-    merchant_discount_rate = pd.pivot_table(features, index='Merchant_id', values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    merchant_discount_rate = pd.pivot_table(ccf_data, index='Merchant_id', values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     merchant_discount_rate.columns = ['Merchant_id', 'merchant_discount_rate_mean', 'merchant_discount_rate_max', 'merchant_discount_rate_min', 'merchant_discount_rate_median', 'merchant_discount_rate_var']
-    merchant_distance = pd.pivot_table(features, index='Merchant_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    merchant_distance = pd.pivot_table(ccf_data, index='Merchant_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     merchant_distance.columns = ['Merchant_id', 'merchant_distance_mean', 'merchant_distance_max', 'merchant_distance_min', 'merchant_distance_median', 'merchant_distance_var']
     features = features.merge(merchant_discount_rate, on='Merchant_id', how='left')
     features = features.merge(merchant_distance, on='Merchant_id', how='left')
@@ -127,13 +136,13 @@ def extract_feature_section_features(start_date, end_date, ccf_off_data, feature
     # 优惠券基础统计特征 #
     coupon_cnt = pd.pivot_table(ccf_data, index='Coupon_id', values='User_id', aggfunc='count').reset_index().rename(columns={'User_id': 'coupon_cnt'})
     features = features.merge(coupon_cnt, on='Coupon_id', how='left')
-    coupon_distance = pd.pivot_table(features, index='Coupon_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    coupon_distance = pd.pivot_table(ccf_data, index='Coupon_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     coupon_distance.columns = ['Coupon_id', 'coupon_distance_mean', 'coupon_distance_max', 'coupon_distance_min', 'coupon_distance_median', 'coupon_distance_var']
     features = features.merge(coupon_distance, on='Coupon_id', how='left')
 
     # 用户-商铺基础统计特征 #
     user_merchant_coupon_cnt = pd.pivot_table(ccf_data, index=['User_id', 'Merchant_id'], values='Coupon_id', aggfunc=return_set_len).reset_index().rename(columns={'Coupon_id': 'user_merchant_coupon_cnt'})
-    user_merchant_coupon_discount_rate = pd.pivot_table(features, index=['User_id', 'Merchant_id'], values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    user_merchant_coupon_discount_rate = pd.pivot_table(ccf_data, index=['User_id', 'Merchant_id'], values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     user_merchant_coupon_discount_rate.columns = ['User_id', 'Merchant_id', 'user_merchant_coupon_discount_rate_mean', 'user_merchant_coupon_discount_rate_max', 'user_merchant_coupon_discount_rate_min', 'user_merchant_coupon_discount_rate_median', 'user_merchant_coupon_discount_rate_var']
     features = features.merge(user_merchant_coupon_cnt, on=['User_id', 'Merchant_id'], how='left')
     features = features.merge(user_merchant_coupon_discount_rate, on=['User_id', 'Merchant_id'], how='left')
@@ -141,7 +150,7 @@ def extract_feature_section_features(start_date, end_date, ccf_off_data, feature
     '''
     # 用户-优惠券基础统计特征 #
     user_coupon_merchant_cnt = pd.pivot_table(ccf_data, index=['User_id', 'Coupon_id'], values='Merchant_id', aggfunc=return_set_len).reset_index().rename(columns={'Merchant_id': 'user_coupon_merchant_cnt'})
-    user_coupon_merchant_discount_rate = pd.pivot_table(features, index=['User_id', 'Coupon_id'], values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    user_coupon_merchant_discount_rate = pd.pivot_table(ccf_data, index=['User_id', 'Coupon_id'], values='discount_type_rate', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
     user_coupon_merchant_discount_rate.columns = ['User_id', 'Coupon_id', 'user_coupon_merchant_discount_rate_mean', 'user_coupon_merchant_discount_rate_max', 'user_coupon_merchant_discount_rate_min', 'user_coupon_merchant_discount_rate_median', 'user_coupon_merchant_discount_rate_var']
     features = features.merge(user_coupon_merchant_cnt, on=['User_id', 'Coupon_id'], how='left')
     features = features.merge(user_coupon_merchant_discount_rate, on=['User_id', 'Coupon_id'], how='left')
@@ -197,26 +206,54 @@ def extract_feature_section_features(start_date, end_date, ccf_off_data, feature
     features = features.merge(coupon_label_max, on='Coupon_id', how='left')
     features = features.merge(coupon_all_use_in_15, on='Coupon_id', how='left')
 
-    # #######################  计算领券日期特征  ######################
-    # # 周几领券 | 周几用券相关特征 #
-    # ccf_data['week'] = [pd.to_datetime(index).weekday() + 1 for index in ccf_data['Date_received']]
-    # user_week_cnt = pd.crosstab(ccf_data['User_id'], ccf_data['week']).reset_index()
-    # user_week_cnt.columns = ['User_id', 'user_monday', 'user_tuesday', 'user_wednesday', 'user_thursday', 'user_friday', 'user_saturday', 'user_sunday']
-    # features = features.merge(user_week_cnt, on='User_id', how='left')
-    #
-    # merchant_week_cnt = pd.crosstab(ccf_data['Merchant_id'], ccf_data['week']).reset_index()
-    # merchant_week_cnt.columns = ['Merchant_id', 'merchant_monday', 'merchant_tuesday', 'merchant_wednesday', 'merchant_thursday', 'merchant_friday', 'merchant_saturday', 'merchant_sunday']
-    # features = features.merge(merchant_week_cnt, on='Merchant_id', how='left')
-    #
-    # coupon_week_cnt = pd.crosstab(ccf_data['Coupon_id'], ccf_data['week']).reset_index()
-    # coupon_week_cnt.columns = ['Coupon_id', 'coupon_monday', 'coupon_tuesday', 'coupon_wednesday', 'coupon_thursday', 'coupon_friday', 'coupon_saturday', 'coupon_sunday']
-    # features = features.merge(coupon_week_cnt, on='Coupon_id', how='left')
+    #######################  计算领券日期特征  ######################
+    # 周几领券 | 周几用券相关特征 #
+    ccf_data['week'] = [pd.to_datetime(index).weekday() + 1 for index in ccf_data['Date_received']]
+    user_week_cnt = pd.crosstab(ccf_data['User_id'], ccf_data['week']).reset_index()
+    user_week_cnt.columns = ['User_id', 'user_monday', 'user_tuesday', 'user_wednesday', 'user_thursday', 'user_friday', 'user_saturday', 'user_sunday']
+    features = features.merge(user_week_cnt, on='User_id', how='left')
+
+    merchant_week_cnt = pd.crosstab(ccf_data['Merchant_id'], ccf_data['week']).reset_index()
+    merchant_week_cnt.columns = ['Merchant_id', 'merchant_monday', 'merchant_tuesday', 'merchant_wednesday', 'merchant_thursday', 'merchant_friday', 'merchant_saturday', 'merchant_sunday']
+    features = features.merge(merchant_week_cnt, on='Merchant_id', how='left')
+
+    coupon_week_cnt = pd.crosstab(ccf_data['Coupon_id'], ccf_data['week']).reset_index()
+    coupon_week_cnt.columns = ['Coupon_id', 'coupon_monday', 'coupon_tuesday', 'coupon_wednesday', 'coupon_thursday', 'coupon_friday', 'coupon_saturday', 'coupon_sunday']
+    features = features.merge(coupon_week_cnt, on='Coupon_id', how='left')
+
+    # 用户、商铺、优惠券距离偏好 #
+    user_distance_stat_cnt = pd.crosstab(ccf_data['User_id'], ccf_data['Distance']).reset_index()
+    user_distance_name = ['user_distance' + str(index) for index in range(11)]
+    user_distance_stat_cnt.columns = ['User_id'] + user_distance_name
+    features = features.merge(user_distance_stat_cnt, on='User_id', how='left')
+
+    merchant_distance_stat_cnt = pd.crosstab(ccf_data['Merchant_id'], ccf_data['Distance']).reset_index()
+    merchant_distance_name = ['merchant_distance' + str(index) for index in range(11)]
+    merchant_distance_stat_cnt.columns = ['Merchant_id'] + merchant_distance_name
+    features = features.merge(merchant_distance_stat_cnt, on='Merchant_id', how='left')
+
+    coupon_distance_stat_cnt = pd.crosstab(ccf_data['Coupon_id'], ccf_data['Distance']).reset_index()
+    coupon_distance_name = ['coupon_distance' + str(index) for index in range(11)]
+    coupon_distance_stat_cnt.columns = ['Coupon_id'] + coupon_distance_name
+    features = features.merge(coupon_distance_stat_cnt, on='Coupon_id', how='left')
+
+    ######################## 未领券消费的 ########################
+    # 用户统计特征 #
+    # print(ccf_data_two.drop(['Coupon_id', 'Date_received', 'Discount_rate',  'label'], axis=1))
+    _user_merchant_cnt = pd.pivot_table(ccf_data_two, index='User_id', values='Merchant_id', aggfunc='count').reset_index().rename(columns={'Merchant_id': '_user_merchant_cnt'})
+    features = features.merge(_user_merchant_cnt, on='User_id', how='left')
+    _user_merchant_set_len = pd.pivot_table(ccf_data_two, index='User_id', values='Merchant_id', aggfunc=return_set_len).reset_index().rename(columns={'Merchant_id': '_user_merchant_set_len'})
+    features = features.merge(_user_merchant_set_len, on='User_id', how='left')
+    _user_distance = pd.pivot_table(ccf_data_two, index='User_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    _user_distance.columns = ['User_id', '_user_distance_mean', '_user_distance_max', '_user_distance_min', '_user_distance_median', '_user_distance_var']
+    # 商铺统计特征 #
+    _merchant_cnt = pd.pivot_table(ccf_data_two, index='Merchant_id', values='User_id', aggfunc='count').reset_index().rename(columns={'User_id': '_merchant_cnt'})
+    features = features.merge(_merchant_cnt, on='Merchant_id', how='left')
+    _merchant_distance = pd.pivot_table(ccf_data_two, index='Merchant_id', values='Distance', aggfunc=[np.mean, np.max, np.min, np.median, np.var]).reset_index()
+    _merchant_distance.columns = ['Merchant_id', '_merchant_distance_mean', '_merchant_distance_max', '_merchant_distance_min', '_merchant_distance_median', '_merchant_distance_var']
+    features = features.merge(_merchant_distance, on='Merchant_id', how='left')
 
     # print(features)
-    # ccf_data = ccf_data[ccf_data['label'] == 0]
-    # data = ccf_data['week'].value_counts().reset_index()
-    # plt.bar(list(data['index']), list(data['week']), color='red')
-    # plt.show()
 
     print(features.shape)
     return features
