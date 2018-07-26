@@ -1,3 +1,5 @@
+### 注意：concat之前确保两个DataFrame的索引index相同，否则concat之后的结果行数和原来的不一样。
+
 >>> s1 = pd.Series(['a', 'b'])
 >>> s2 = pd.Series(['c', 'd'])
 >>> pd.concat([s1, s2])
