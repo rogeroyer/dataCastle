@@ -19,23 +19,13 @@ def calc_auc_score(data_frame, predict):
             return 1
         if len(set(label)) == 1:
             return 1
-
-        # if len(set(label)) == 1:
-        #     if 0 in set(label):
-        #         return 0
-        #     else:
-        #         return 1
-
         return roc_auc_score(label, predict)
 
     data_frame['predict'] = [index for index in predict]
     data_frame_label = pd.pivot_table(data_frame, index='Coupon_id', values=['label'], aggfunc=return_list).reset_index()
     data_frame_predict = pd.pivot_table(data_frame, index='Coupon_id', values=['predict'], aggfunc=return_list).reset_index()
     data_frame_label = data_frame_label.merge(data_frame_predict, on='Coupon_id', how='left')
-    # data_frame_label.to_csv(submit_path + 'result.csv', index=None, encoding='utf-8')
-    # print('store ok.')
     data_frame_label['score'] = data_frame_label.apply(lambda index: return_score(index.label, index.predict), axis=1)
-    print(data_frame_label)
     return np.mean(data_frame_label['score'])
 
 
@@ -45,14 +35,14 @@ def train_xgb_module(store_features=False, store_result=False, select_feature=Fa
         print('start extract label feature section features')
         train_feature = extract_label_section_features('2016-04-01', '2016-05-01', ccf_off_train_data)
         validate_feature = extract_label_section_features('2016-05-15', '2016-06-15', ccf_off_train_data)
-        test_feature = extract_label_section_features('2016-07-01', '2016-07-32', ccf_off_test_data)
+        test_feature = extract_label_section_features('2016-07-01', '2016-07-31', ccf_off_test_data)
         print('feature label features extract successfully!')
 
-        print('start extract feature section features')
-        train_feature = extract_feature_section_features('2016-01-15', '2016-03-15', ccf_off_train_data, train_feature)
-        validate_feature = extract_feature_section_features('2016-03-15', '2016-05-01', ccf_off_train_data, validate_feature)
-        test_feature = extract_feature_section_features('2016-05-01', '2016-06-15', ccf_off_train_data, test_feature)
-        print('feature section features extract successfully!')
+        # print('start extract feature section features')
+        # train_feature = extract_feature_section_features('2016-02-01', '2016-03-15', ccf_off_train_data, train_feature)
+        # validate_feature = extract_feature_section_features('2016-03-15', '2016-05-01', ccf_off_train_data, validate_feature)
+        # test_feature = extract_feature_section_features('2016-05-01', '2016-06-15', ccf_off_train_data, test_feature)
+        # print('feature section features extract successfully!')
         '''store'''
         try:
             print('start to store features...')
@@ -119,7 +109,6 @@ def train_xgb_module(store_features=False, store_result=False, select_feature=Fa
         colsample_bytree=0.8,
         scale_pos_weight=1,
     )
-
     # website: https://blog.csdn.net/u012969412/article/details/72973055 #
     params = {"n_estimators": np.arange(400, 1000, 100), 'learning_rate': np.arange(0.02, 0.1, 0.01), 'max_depth': np.arange(4, 8, 1)}
     print(params)
@@ -131,13 +120,13 @@ def train_xgb_module(store_features=False, store_result=False, select_feature=Fa
     exit(0)
     '''
 
-    validate = xgb.DMatrix(train_feature, label=train_label)
-    validate_feature = xgb.DMatrix(validate_feature)
-    module = xgb.train(params, validate, num_round)
-    predict = module.predict(validate_feature)
-    print('iteration round:', num_round)
-    # print('auc score:', roc_auc_score(validate_label['label'], predict))
-    print('auc score:', calc_auc_score(validate_data_frame, predict))
+    # validate = xgb.DMatrix(train_feature, label=train_label)
+    # validate_feature = xgb.DMatrix(validate_feature)
+    # module = xgb.train(params, validate, num_round)
+    # predict = module.predict(validate_feature)
+    # print('iteration round:', num_round)
+    # # print('auc score:', roc_auc_score(validate_label['label'], predict))
+    # print('auc score:', calc_auc_score(validate_data_frame, predict))
 
     del train_feature
     del validate_feature
@@ -164,7 +153,7 @@ def train_xgb_module(store_features=False, store_result=False, select_feature=Fa
 
 if __name__ == '__main__':
     start_time = time.clock()
-    train_xgb_module(store_features=True, store_result=False, select_feature=False, num_round=500)
+    train_xgb_module(store_features=True, store_result=True, select_feature=False, num_round=500)
     end_time = time.clock()
     print('program spend time：', end_time - start_time, ' sec')
 
