@@ -1,0 +1,12 @@
+thon,pandas基本函数
+查看数据,.head() .tail() .shape .describe()
+矩阵运算,.add() .sub() .mul() .div() .divmod() .combine()
+矩阵比较,.eq() .ne() .lt() .gt() .le() .ge()|.empty .any() .all() .bool()
+数据框连接,.align() .merge() .join() .concatenate()
+设置行名列名,.column .reindex() .reindex_like()|.rename()
+列操作,.drop() .insert() .assign()
+数据类型,.dtypes .get_dtype_counts() .astype() .to_numeric()… .select_dtypes()
+数据运算,.pipe() .apply() .applymap()
+统计运算,.cut() .qcut() .idxmin() .idxmax() .value_counts() .sum()…
+排序,.sort_index() .sort_values() .nsmallest() .nlargest()
+其他,.dt Iteration .copy() .info()
