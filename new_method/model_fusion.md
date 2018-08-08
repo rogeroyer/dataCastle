@@ -30,3 +30,9 @@ for i in range(10):
     res['predicted_score'] += res['prob_%s' % str(i)].apply(lambda x: math.log(x/(1-x)))
 res['predicted_score'] = (res['predicted_score']/10).apply(lambda x: 1/(1+math.exp(-x)))
 ```
+
+### references
+- https://www.csie.ntu.edu.tw/~r01922136/slides/kaggle-avazu.pdf
+- https://zhuanlan.zhihu.com/p/36858386
+- https://www.csie.ntu.edu.tw/~cjlin/papers/ffm.pdf
+- https://www.cnblogs.com/hhh5460/p/5186226.html
