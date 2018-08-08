@@ -2,7 +2,7 @@
 
 > 首先将各个模型的结果代入到sigmoid反函数中，然后得到其均值，对其结果使用sigmoid函数。相较于普通的加权平均，这种方法更适合于结果具有较小差异性的。
 
-![融合示意图]()
+![融合示意图](https://github.com/rogeroyer/dataCastle/blob/master/new_method/v2-ccdfaa27f0c043d3603d4adeac0701be_r.jpg)
 
 ```python
 def f(x):
