@@ -1,4 +1,4 @@
-## collection.Counter类
+## collections.Counter类
 ***
 
 > Counter类的目的是用来跟踪值出现的次数。它是一个无序的容器类型，以字典的键值对形式存储，其中元素作为key，其计数作为value。计数值可以是任意的Interger（包括0和负数）。Counter类和其他语言的bags或multisets很相似。
@@ -6,6 +6,7 @@
 ### 1 创建
 - 下面的代码说明了Counter类创建的四种方法：
 ```python
+>>> from collections import Counter
 >>> c = Counter()  # 创建一个空的Counter类
 >>> c = Counter('gallahad')  # 从一个可iterable对象（list、tuple、dict、字符串等）创建
 >>> c = Counter({'a': 4, 'b': 2})  # 从一个字典对象创建
