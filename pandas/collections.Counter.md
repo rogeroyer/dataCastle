@@ -3,7 +3,7 @@
 
 > Counter类的目的是用来跟踪值出现的次数。它是一个无序的容器类型，以字典的键值对形式存储，其中元素作为key，其计数作为value。计数值可以是任意的Interger（包括0和负数）。Counter类和其他语言的bags或multisets很相似。
 
-### 2.1 创建
+### 1 创建
 - 下面的代码说明了Counter类创建的四种方法：
 ```python
 >>> c = Counter()  # 创建一个空的Counter类
@@ -11,7 +11,7 @@
 >>> c = Counter({'a': 4, 'b': 2})  # 从一个字典对象创建
 >>> c = Counter(a=4, b=2)  # 从一组键值对创建
 ```
-### 2.2 计数值的访问与缺失的键
+### 2 计数值的访问与缺失的键
 - 当所访问的键不存在时，返回0，而不是KeyError；否则返回它的计数。
 ```python
 >>> c = Counter("abcdefgab")
@@ -23,7 +23,7 @@
 0
 ```
 
-### 2.3 计数器的更新（update和subtract）
+### 3 计数器的更新（update和subtract）
 - 可以使用一个iterable对象或者另一个Counter对象来更新键值。
 - 计数器的更新包括增加和减少两种。其中，增加使用update()方法：
 ```python
@@ -48,7 +48,7 @@
 -1
 ```
 
-### 2.4 键的删除
+### 4 键的删除
 - 当计数值为0时，并不意味着元素被删除，删除元素应当使用`del`。
 ```python
 >>> c = Counter("abcdcba")
@@ -62,7 +62,7 @@ Counter({'a': 2, 'c': 2, 'd': 1, 'b': 0})
 Counter({'c': 2, 'b': 2, 'd': 1})
 ```
 
-### 2.5 elements()
+### 5 elements()
 - 返回一个迭代器。元素被重复了多少次，在该迭代器中就包含多少个该元素。元素排列无确定顺序，个数小于1的元素不被包含。
 ```python
 >>> c = Counter(a=4, b=2, c=0, d=-2)
@@ -70,7 +70,7 @@ Counter({'c': 2, 'b': 2, 'd': 1})
 ['a', 'a', 'a', 'a', 'b', 'b']
 ```
 
-### 2.6 most_common([n])
+### 6 most_common([n])
 - 返回一个TopN列表。如果n没有被指定，则返回所有元素。当多个元素计数值相同时，排列是无确定顺序的。
 ```python
 >>> c = Counter('abracadabra')
@@ -80,10 +80,10 @@ Counter({'c': 2, 'b': 2, 'd': 1})
 [('a', 5), ('r', 2), ('b', 2)]
 ```
 
-### 2.7 fromkeys
+### 7 fromkeys
 - 未实现的类方法。
 
-### 2.8 浅拷贝copy
+### 8 浅拷贝copy
 ```python
 >>> c = Counter("abcdcba")
 >>> c
@@ -92,7 +92,7 @@ Counter({'a': 2, 'c': 2, 'b': 2, 'd': 1})
 >>> d
 Counter({'a': 2, 'c': 2, 'b': 2, 'd': 1})
 ```
-### 2.9 算术和集合操作
+### 9 算术和集合操作
 - +、-、&、|操作也可以用于Counter。其中&和|操作分别返回两个Counter对象各元素的最小值和最大值。需要注意的是，得到的Counter对象将删除小于1的元素。
 ```python
 >>> c = Counter(a=3, b=1)
@@ -106,7 +106,7 @@ Counter({'a': 1, 'b': 1})
 >>> c | d  # 并集:  max(c[x], d[x])
 Counter({'a': 3, 'b': 2})
 ```
-### 3.常用操作
+### 常用操作
 - 下面是一些Counter类的常用操作，来源于Python官方文档
 ```python
 sum(c.values())  # 所有计数的总数
