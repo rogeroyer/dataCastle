@@ -51,3 +51,36 @@ print(test_log)
 15      10018  359-1234-2004  2018-03-19 18:34:58        0   19     -12.0
 
 
+                
+                
+                
+"""Example"""
+>>> import pandas as pd
+>>> import numpy as np
+>>> df = pd.DataFrame(np.arange(24).reshape(6,4),index=['r1','r2','r3','r4','r5','r6'],columns=['A','B','C','D'])
+>>> df
+     A   B   C   D
+r1   0   1   2   3
+r2   4   5   6   7
+r3   8   9  10  11
+r4  12  13  14  15
+r5  16  17  18  19
+r6  20  21  22  23
+
+>>> df.shift(periods=1, axis=0)
+       A     B     C     D
+r1   NaN   NaN   NaN   NaN
+r2   0.0   1.0   2.0   3.0
+r3   4.0   5.0   6.0   7.0
+r4   8.0   9.0  10.0  11.0
+r5  12.0  13.0  14.0  15.0
+r6  16.0  17.0  18.0  19.0
+>>> df.diff(periods=1, axis=0)
+      A    B    C    D
+r1  NaN  NaN  NaN  NaN
+r2  4.0  4.0  4.0  4.0
+r3  4.0  4.0  4.0  4.0
+r4  4.0  4.0  4.0  4.0
+r5  4.0  4.0  4.0  4.0
+r6  4.0  4.0  4.0  4.0
+>>>
